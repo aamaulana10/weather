@@ -1,17 +1,21 @@
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:get/get.dart';
+import 'package:myweather2/feature/home/data/HomeRepository.dart';
+import 'package:myweather2/feature/home/domain/model/WeatherForecastModel.dart';
 import 'package:myweather2/feature/home/domain/model/WeatherTypeModel.dart';
 
 class HomePresenter extends GetxController {
   var address = "";
+  var service = HomeRepository();
+  WeatherForecastModel weatherForecastModel = WeatherForecastModel();
   WeatherTypeModel weatherTypeModel = WeatherTypeModel();
 
   getCurrentTimeType() {
     var currentHour = DateTime.now().hour;
     print(currentHour);
 
-    if (currentHour >= 0 && currentHour < 12) {
+    if (currentHour >= 06 && currentHour < 12) {
       // its morning
       weatherTypeModel = WeatherTypeModel(
           image: "lib/assets/image/morning.jpeg", type: "Morning");
@@ -48,6 +52,14 @@ class HomePresenter extends GetxController {
     update();
   }
 
+  void getForeCast(String latitude, String longitude) async {
+    weatherForecastModel =
+    await service.getCurrentWeatherByLatLong(latitude, longitude);
+    print(weatherForecastModel.toJson());
+
+    update();
+  }
+
   getCurrentLocation() async {
     try {
       var permission = await Geolocator.checkPermission();
@@ -66,6 +78,7 @@ class HomePresenter extends GetxController {
       print("$position.latitude, $position.longitude");
 
       _getAddressFromLatLng(position.latitude, position.longitude);
+      getForeCast(position.latitude.toString(), position.longitude.toString());
     } catch (e) {
       print(e);
     }
