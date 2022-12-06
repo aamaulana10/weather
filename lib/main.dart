@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:myweather2/feature/home/presentation/HomeView.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,13 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(
-        body: Container(
-          child: Center(
-            child: Text("hello word"),
-          ),
-        ),
-      ),
+      home: HomeView()
     );
   }
 }
